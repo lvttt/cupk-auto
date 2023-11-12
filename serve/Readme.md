@@ -26,5 +26,5 @@
 4. 运行项目：
 
    ```bash
-   python run.py
+   python app.py
    ```
