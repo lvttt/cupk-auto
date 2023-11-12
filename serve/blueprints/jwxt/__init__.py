@@ -31,34 +31,22 @@ def GetReadyScore():
     return selectCourse.getReadyScore()
 
 
-@jwxt_bp.route('/xk/queryCourseList', methods=['POST'])
-def QueryCourseList():
-    """
-    查询课程列表: 本学期计划选课
-    """
-    try:
-        request_data = request.get_json()
-        mode = request_data['mode'] # 选课模式
-        params = request_data['params'] # 查询参数
-    except:
-        return Error(msg="参数错误").toJson()
-    from . import selectCourse
-    return selectCourse.queryCourseList(params, mode)
-
-
 @jwxt_bp.route('/xk/selectCourse', methods=['POST'])
 def SelectCourse():
     """
-    选课: 本学期计划选课
+    选课
     """
     # get flask request.args then convert to json and get courselist
     try:
         request_data = request.get_json()
         courselist = request_data['courselist'] # 课程id列表
         mode = request_data['mode'] # 选课模式
+        params = request_data['params']  # 查询参数
     except:
         return Error(msg="参数错误").toJson()
     from . import selectCourse
-    return selectCourse.selectCourse(courselist, mode)
+    courseData = selectCourse.queryCourseList(params,mode)
+    coursemp = selectCourse.getCourseId(courseData)
+    return selectCourse.selectCourse(courselist, coursemp, mode)
 
 

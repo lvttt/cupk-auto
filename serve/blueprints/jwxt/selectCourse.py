@@ -59,18 +59,21 @@ def queryCourseList(params,mode=0):
     try:
         response = session.post(url, params=params, data=data,
              verify=False)
-        return Success(data=response.json()).toJson()
+        return response.json()["aaData"]
     except Exception as e:
         print(e)
         return Error(msg="出错了").toJson()
 
-def selectCourse(courselist, mode=0):
+def selectCourse(courselist:list, coursemp:dict,mode=0):
     try:
         res = []
         url = app.config["SELECT_COURSE_URL"][mode]
         for courseId in courselist:
+            cid = coursemp.get(courseId)
+            if cid is None:
+                cid = '0'
             params = {
-                'jx0404id': courseId,
+                'jx0404id': cid,
                 'xkzy': '',
                 'trjf': '',
             }
@@ -82,3 +85,17 @@ def selectCourse(courselist, mode=0):
     except Exception as e:
         print(e)
         return Error(msg="出错了").toJson()
+
+
+def getCourseId(courseData):
+    coursemp = {}
+    try:
+        for course in courseData:
+            key = course["kch"]+ course["kckxh"]
+            val = course["jx0404id"]
+            coursemp[key] = val
+            return coursemp
+    except Exception as e:
+        print(e)
+        return Error(msg="出错了").toJson()
+
