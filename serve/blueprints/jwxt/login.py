@@ -21,7 +21,7 @@ def login():
         error_msg = bs4(response.text, 'lxml').find('font', {'class': 'dlmi1'})
         if error_msg:
             # login failed
-            return Error(msg=error_msg).toJson()
+            return Error(msg=error_msg.text).toJson()
         else:
             return Success().toJson()
     except Exception as e:
