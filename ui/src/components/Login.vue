@@ -1,13 +1,16 @@
 <template>
-    <el-select v-model="value" class="m-2" placeholder="Select" size="large">
-    <el-option
-      v-for="item in options"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value"
-    />
-  </el-select><br><br>
-  <el-button type="primary" size="large" round @click="handleClick">登录</el-button>
+  <div style="margin: 25% auto;">
+      <el-select v-model="value" class="m-2" placeholder="Select" size="large">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+          </el-select><br><br>
+      <el-button type="primary" size="large" round @click="handleClick">登录</el-button>
+  </div>
+
 </template>
 
 <script setup>
@@ -30,29 +33,33 @@ const options = [{
 function handleClick() {
   if(value.value === 1){
       // 登录教务系统
-      fetch("http://localhost:8877/jwxt/login").then(res=>res.json())
-      .then(res=>{
-          if(res.code === 1){
-              ElMessage({
-                  message: '登录成功',
-                  type: 'success'
-              })
-              // props: {page: 'SIS'}
-              router.push({path: "/home", query: {page: "SIS"}})
-          }else{
-              ElMessage.error(res.msg)
-          }
+      // fetch("http://localhost:8877/jwxt/login").then(res=>res.json())
+      // .then(res=>{
+      //     if(res.code === 1){
+      //         ElMessage({
+      //             message: '登录成功',
+      //             type: 'success'
+      //         })
+      //         router.push({path: "/sis/home/qk"})
+      //     }else{
+      //         ElMessage.error(res.msg)
+      //     }
+      // })
+      // .catch(err=>{
+      //   console.log(err)
+      // })
+      ElMessage({
+          message: '登录成功',
+          type: 'success'
       })
-      .catch(err=>{
-        console.log(err)
-      })
+      router.push({path: "/sis/home/qk"})
   }else if(value.value === 2){
       // 登录融合门户
       ElMessage({
           message: '登录成功',
           type: 'success'
       });
-      router.push({path: "/home", query: {page: "FusionPortal"}})
+      router.push({path: "/fp/home"})
   }
 }
 

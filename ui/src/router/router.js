@@ -13,9 +13,17 @@ const routes = [
     component: () => import('../components/Login.vue')
   },
   {
-    path: '/home',
-    name: 'Home',
-    component: () => import('../components/Home.vue')
+    path: '/sis/home',
+    name: 'SisHome',
+    component: () => import('../components/SisHome.vue'),
+    children:[
+      {path: 'qk', component: () => import('../components/SIS/SisSelectCourse.vue')}
+    ]
+  },
+  {
+    path: '/fp/home',
+    name: 'FpHome',
+    component: () => import('../components/FpHome.vue')
   }
 ];
 

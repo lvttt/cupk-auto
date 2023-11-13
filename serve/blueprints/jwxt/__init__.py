@@ -1,5 +1,6 @@
 from flask import Blueprint, request
 from Response import Success, Error
+import json
 
 jwxt_bp = Blueprint('jwxt', __name__)
 
@@ -50,3 +51,28 @@ def SelectCourse():
     return selectCourse.selectCourse(courselist, coursemp, mode)
 
 
+@jwxt_bp.route('/xk/upload', methods=['POST'])
+def uploadCourseList():
+    """
+    上传课程列表
+    """
+    try:
+        import pandas as pd
+        uploaded_file = request.files['file']
+        df = pd.read_excel(uploaded_file)
+        df["教学班"] = df["教学班"].apply(lambda x: str(x).zfill(2))
+        data = pd.DataFrame({
+            "courseId": df["课程代码"],
+            "classId": df["教学班"],
+            "courseName": df["课程名"],
+            "teacher": df["上课教师"],
+            "time": df["上课时间"],
+            "class": df["上课班级"],
+            "type": df["课程属性"],
+            "mode": ''
+        })
+        data_json = json.loads(data.to_json(orient="records"))
+    except Exception as e:
+        print(e)
+        return Error(msg="出错了").toJson()
+    return Success(data_json).toJson()

@@ -98,4 +98,3 @@ def getCourseId(courseData):
     except Exception as e:
         print(e)
         return Error(msg="出错了").toJson()
-

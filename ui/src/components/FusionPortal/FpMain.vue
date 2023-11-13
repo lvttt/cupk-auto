@@ -1,9 +1,10 @@
 <template>
-    <div>融合门户</div>
+    融合门户Main
 </template>
 
 <script setup>
-import { ref } from 'vue'
+
+
 </script>
 
 <style scoped>
