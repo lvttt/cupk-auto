@@ -180,7 +180,7 @@ function getmode(value){
 }
 
 async function loginxk(){
-    fetch("http://localhost:8877/jwxt/xk/login").then(res=>res.json())
+    await fetch("http://localhost:8877/jwxt/xk/login").then(res=>res.json())
     .then(res=>{
         console.log(res);
     }).catch(err=>{
