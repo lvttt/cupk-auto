@@ -33,26 +33,26 @@ const options = [{
 function handleClick() {
   if(value.value === 1){
       // 登录教务系统
-      // fetch("http://localhost:8877/jwxt/login").then(res=>res.json())
-      // .then(res=>{
-      //     if(res.code === 1){
-      //         ElMessage({
-      //             message: '登录成功',
-      //             type: 'success'
-      //         })
-      //         router.push({path: "/sis/home/qk"})
-      //     }else{
-      //         ElMessage.error(res.msg)
-      //     }
-      // })
-      // .catch(err=>{
-      //   console.log(err)
-      // })
-      ElMessage({
-          message: '登录成功',
-          type: 'success'
+      fetch("http://localhost:8877/jwxt/login").then(res=>res.json())
+      .then(res=>{
+          if(res.code === 1){
+              ElMessage({
+                  message: '登录成功',
+                  type: 'success'
+              })
+              router.push({path: "/sis/home/qk"})
+          }else{
+              ElMessage.error(res.msg)
+          }
       })
-      router.push({path: "/sis/home/qk"})
+      .catch(err=>{
+        console.log(err)
+      })
+      // ElMessage({
+      //     message: '登录成功',
+      //     type: 'success'
+      // })
+      // router.push({path: "/sis/home/qk"})
   }else if(value.value === 2){
       // 登录融合门户
       ElMessage({

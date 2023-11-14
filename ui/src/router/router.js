@@ -17,7 +17,8 @@ const routes = [
     name: 'SisHome',
     component: () => import('../components/SisHome.vue'),
     children:[
-      {path: 'qk', component: () => import('../components/SIS/SisSelectCourse.vue')}
+      {path: 'qk', component: () => import('../components/SIS/SisSelectCourse.vue')},
+      {path: 'pj', component: () => import('../components/SIS/SisAutoRate.vue')}
     ]
   },
   {

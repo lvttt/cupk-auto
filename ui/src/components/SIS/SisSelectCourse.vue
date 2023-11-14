@@ -179,7 +179,55 @@ function getmode(value){
     else return 3
 }
 
+async function loginxk(){
+    fetch("http://localhost:8877/jwxt/xk/login").then(res=>res.json())
+    .then(res=>{
+        console.log(res);
+    }).catch(err=>{
+        console.log(err);
+    })
+}
+
+async function requestSelectCourse(courselist, mode, courseid, idx){
+    await fetch("http://localhost:8877/jwxt/xk/selectCourse", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        },
+        body: JSON.stringify({
+            "params" : {
+                'kcxx': courseid,
+                'skls': '',
+                'skxq': '',
+                'skjc': '',
+                'sfym': 'false',
+                'sfct': 'false',
+                'sfxx': 'false',
+            },
+            "courselist": courselist,
+            "mode": mode
+        })
+    }).then(res=>res.json())
+    .then(res=>{
+        if(res.code == 1){
+            if(idx > -1){
+                if(res.data[0].success)
+                    courseData.value[idx].ready = 1
+            }else{
+                res.data.forEach((v, i, arr)=>{
+                    if(v.success)
+                        courseData.value[i].ready = 1
+                })
+            }
+            
+        }
+    }).catch(err=>{
+        console.log(err);
+    })
+}
+
 async function startQk(){
+    await loginxk()
     let order = ['本学期计划选课', '公选课选课','专业内跨年级选课', '跨专业选课']
     for(let i = 0; i < order.length; i++){
         radio1.value = order[i]
@@ -205,36 +253,13 @@ async function startQk(){
             await sleep(1000);
             
             // request
-            fetch("http://localhost:8877/jwxt/xk/selectCourse", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json;charset=UTF-8"
-                },
-                body: JSON.stringify({
-                    "params" : {
-                        'kcxx': '',
-                        'skls': '',
-                        'skxq': '',
-                        'skjc': '',
-                        'sfym': 'false',
-                        'sfct': 'false',
-                        'sfxx': 'false',
-                    },
-                    "courselist": courselist,
-                    "mode": mode
-                })
-            }).then(res=>res.json())
-            .then(res=>{
-                if(res.code == 1){
-                    res.data.forEach((v, i, arr)=>{
-                        if(v.success)
-                            courseData.value[i].ready = 1
-                    })
+            if(mode == 0 || mode == 3) 
+                await requestSelectCourse(courselist, mode, '')
+            else{
+                for(let k = 0; k < courselist.length; k++){
+                    await requestSelectCourse([courselist[k]], mode, courselist[k].substring(0, courselist[k].length-2), k)
                 }
-            }).catch(err=>{
-                console.log(err);
-            })
-
+            }
 
             let flag = true
             for(let k = 0; k < courseData.value.length; k++){

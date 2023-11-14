@@ -91,7 +91,6 @@ def selectCourse(courselist:list, coursemp:dict,mode=0):
 def getCourseId(courseData):
     coursemp = {}
     try:
-        print(courseData)
         for course in courseData:
             key = course["kch"]+ course["kckxh"]
             val = course["jx0404id"]
