@@ -4,6 +4,7 @@ from Response import Success, Error
 
 session = app.config["SESSION"]
 
+
 def _getReadyScore():
     response = session.get(app.config["READY_SCORE_URL"], verify=False)
     return response.text
@@ -62,7 +63,7 @@ def queryCourseList(params,mode=0):
         return response.json()["aaData"]
     except Exception as e:
         print(e)
-        return Error(msg="出错了").toJson()
+        return None
 
 def selectCourse(courselist:list, coursemp:dict,mode=0):
     try:
@@ -90,11 +91,12 @@ def selectCourse(courselist:list, coursemp:dict,mode=0):
 def getCourseId(courseData):
     coursemp = {}
     try:
+        print(courseData)
         for course in courseData:
             key = course["kch"]+ course["kckxh"]
             val = course["jx0404id"]
             coursemp[key] = val
-            return coursemp
+        return coursemp
     except Exception as e:
         print(e)
         return Error(msg="出错了").toJson()

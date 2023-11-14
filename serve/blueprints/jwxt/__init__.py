@@ -1,9 +1,9 @@
 from flask import Blueprint, request
 from Response import Success, Error
+
 import json
 
 jwxt_bp = Blueprint('jwxt', __name__)
-
 
 @jwxt_bp.route('/login')
 def Login():
@@ -46,7 +46,15 @@ def SelectCourse():
     except:
         return Error(msg="参数错误").toJson()
     from . import selectCourse
-    courseData = selectCourse.queryCourseList(params,mode)
+    app = selectCourse.app
+    courseData = None
+    if mode == 0 or mode == 3:
+        # 已查询过不再查询
+        if app.config[f"COURSE_DATA_0{mode+1}"] is None:
+            app.config[f"COURSE_DATA_0{mode+1}"] = selectCourse.queryCourseList(params,mode)
+        courseData = app.config[f"COURSE_DATA_0{mode+1}"]
+    else:
+        courseData = selectCourse.queryCourseList(params,mode)
     coursemp = selectCourse.getCourseId(courseData)
     return selectCourse.selectCourse(courselist, coursemp, mode)
 
@@ -69,7 +77,8 @@ def uploadCourseList():
             "time": df["上课时间"],
             "class": df["上课班级"],
             "type": df["课程属性"],
-            "mode": ''
+            "mode": '',
+            "ready": 0
         })
         data_json = json.loads(data.to_json(orient="records"))
     except Exception as e:

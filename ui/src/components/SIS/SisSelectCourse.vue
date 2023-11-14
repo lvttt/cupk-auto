@@ -25,7 +25,12 @@
       <el-radio-button label="跨专业选课" />
       <el-radio-button label="公选课选课" />
     </el-radio-group>
-    <el-button type="primary" class="qkbutton" @click="startQk">开始抢课</el-button>
+    <div class="qkdiv">
+        <span class="tip"> 失败循环抢课次数 ：</span>
+        <el-input-number v-model="qkcount" :min="1" :max="10" />
+        <el-button type="primary" class="qkbutton"  @click="startQk">开始抢课</el-button>
+    </div>
+    
     <br>
         <div class="tip">建议只使用<em> 本学期计划选课 </em>和<em> 公选课选课 </em></div>
   </div><br>
@@ -45,6 +50,12 @@
                 <el-option label="跨专业选课" value="2"></el-option>
                 <el-option label="公选课选课" value="3"></el-option>
             </el-select>
+        </template>
+    </el-table-column>
+    <el-table-column v-if="radio1 != '可选课程'" align="center" show-overflow-tooltip prop="type" label="抢课状态">
+        <template #default="scope">
+            <el-tag v-if="scope.row.ready == 1" type="success">已抢</el-tag>
+            <el-tag v-else type="danger">未抢</el-tag>
         </template>
     </el-table-column>
     <el-table-column align="center" label="添加选课">
@@ -74,30 +85,13 @@ import { ElMessage } from 'element-plus'
 
 const currentPage = ref(1)
 const pagesize = ref(8)
+const qkcount = ref(1)
 
 // create a dictionary of course data key=courseId+classId, value=(1 or 0)
 const courseDataDict = ref({})
 
 
-const allCourseData = ref([{
-    courseId: '123',
-    courseName: '计算机网络',
-    classId: '01',
-    teacher: '张三',
-    time: '周一 1-2节',
-    class: '计算机科学与技术1班',
-    type: '专业必修课',
-    mode: ''
-},{
-    courseId: '456',
-    courseName: '计算机组成原理',
-    classId: '02',
-    teacher: '李四',
-    time: '周二 3-4节',
-    class: '计算机科学与技术2班',
-    type: '专业选修课',
-    mode: ''
-}])
+const allCourseData = ref([])
 const courseData01 = ref([])
 const courseData02 = ref([])
 const courseData03 = ref([])
@@ -174,17 +168,95 @@ function getCourseData(res, file){
     }
 }
 
-function startQk(){
-    if(courseData.value.length == 0){
-        ElMessage({
-          message: '请先上传课程数据',
-          type: 'warning'
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+function getmode(value){
+    if(value == '本学期计划选课') return 0
+    else if(value == '专业内跨年级选课') return 1
+    else if(value == '跨专业选课') return 2
+    else return 3
+}
+
+async function startQk(){
+    let order = ['本学期计划选课', '公选课选课','专业内跨年级选课', '跨专业选课']
+    for(let i = 0; i < order.length; i++){
+        radio1.value = order[i]
+        radioChange(radio1.value)
+        if(courseData.value.length == 0){
+            ElMessage({
+                message: '没有可抢课程',
+                type: 'warning'
+            })
+            continue
+        }
+        let mode = getmode(radio1.value)
+        let courselist = []
+        courseData.value.forEach((v, i, arr)=>{
+            courselist.push(v.courseId + v.classId)
         })
-        return
+        for(let j = 0; j < qkcount.value; j++){
+            
+            ElMessage({
+                message: `第${j+1}次抢课开始`,
+                type: 'success'
+            })
+            await sleep(1000);
+            
+            // request
+            fetch("http://localhost:8877/jwxt/xk/selectCourse", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json;charset=UTF-8"
+                },
+                body: JSON.stringify({
+                    "params" : {
+                        'kcxx': '',
+                        'skls': '',
+                        'skxq': '',
+                        'skjc': '',
+                        'sfym': 'false',
+                        'sfct': 'false',
+                        'sfxx': 'false',
+                    },
+                    "courselist": courselist,
+                    "mode": mode
+                })
+            }).then(res=>res.json())
+            .then(res=>{
+                if(res.code == 1){
+                    res.data.forEach((v, i, arr)=>{
+                        if(v.success)
+                            courseData.value[i].ready = 1
+                    })
+                }
+            }).catch(err=>{
+                console.log(err);
+            })
+
+
+            let flag = true
+            for(let k = 0; k < courseData.value.length; k++){
+                if(courseData.value[k].ready == 0){
+                    flag = false
+                    break
+                }
+            }
+            if(flag) {
+                ElMessage({
+                    message: '本表所有课程已抢完',
+                    type: 'success'
+                })
+                break
+            }
+        }
     }
+    radio1.value = '可选课程'
+    radioChange(radio1.value)
     ElMessage({
-      message: '开始抢课',
-      type: 'success'
+        message: '抢课结束',
+        type: 'success'
     })
 }
 
@@ -198,6 +270,8 @@ function handleCurrentChange(val){
     console.log(courseData.value);
 }
 
+
+
 </script>
 <style scoped>
 .tip{
@@ -210,8 +284,11 @@ function handleCurrentChange(val){
 .el-pagination{
     justify-content: center;
 }
-.qkbutton{
+.qkdiv{
     position: absolute;
     right: 2%;
+}
+.qkbutton{
+    margin-left: 10px;
 }
 </style>
