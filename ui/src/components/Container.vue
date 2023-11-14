@@ -21,9 +21,9 @@
                 <el-aside width="el_menu_width">
                     <!-- aside -->
                     <el-menu
-                        default-active="1"
                         class="el-menu-vertical"
                         :collapse="isCollapse"
+                        :default-active="route.path"
                     >   
                     <br>
                         <el-button plain :icon="Expand" circle @click="changeCollapse" v-if="isCollapse" />
@@ -45,7 +45,7 @@
 import SisAside from './SIS/SisAside.vue'
 import FpAside from './FusionPortal/FpAside.vue'
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter,useRoute } from 'vue-router'
 import {
     Fold,
     Expand,
@@ -56,6 +56,7 @@ import fpLogo from '../assets/rhmh_logo.png'
 
 const isCollapse = ref(false)
 const router = useRouter()
+const route = useRoute()
 
 function changeCollapse(){
     isCollapse.value = ! isCollapse.value;

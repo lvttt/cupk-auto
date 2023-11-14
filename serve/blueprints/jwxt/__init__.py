@@ -85,3 +85,12 @@ def uploadCourseList():
         print(e)
         return Error(msg="出错了").toJson()
     return Success(data_json).toJson()
+
+@jwxt_bp.route('/pj/getlist')
+def GetPJList():
+    """
+    获取评教列表
+    """
+    from . import AutoRate
+    result = AutoRate.getPJList()
+    return AutoRate.getRateslist(result)
