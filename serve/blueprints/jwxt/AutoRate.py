@@ -27,7 +27,7 @@ def getPJList():
         return result
     except Exception as e:
         print(e)
-        return Error(msg="出错了").toJson()
+        return []
 
 
 def getRateslist(result):
@@ -41,6 +41,7 @@ def getRateslist(result):
                 cols = row.find_all('td')
                 item["sublist"].append({
                     "course": cols[2].text,
+                    "teacher": cols[3].text,
                     "score": cols[5].text,
                     "finish": cols[6].text
                 })

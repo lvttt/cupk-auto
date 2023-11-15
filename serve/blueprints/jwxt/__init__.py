@@ -94,3 +94,19 @@ def GetPJList():
     from . import AutoRate
     result = AutoRate.getPJList()
     return AutoRate.getRateslist(result)
+
+@jwxt_bp.route('/cj/getlist')
+def GetGradeList():
+    """
+    获取成绩列表
+    """
+    from . import Grade
+    return Grade.getGradeList()
+
+@jwxt_bp.route('/cj/getrank')
+def GetGradeRank():
+    """
+    获取成绩排名
+    """
+    from . import Grade
+    return Grade.getGradeRank()

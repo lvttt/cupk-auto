@@ -11,10 +11,16 @@
             <template #title>自动评教</template>
         </el-menu-item>
     </router-link>
+    <router-link to="/sis/home/cj" class="router-link">
+        <el-menu-item index="/sis/home/cj">
+            <el-icon><reading /></el-icon>
+            <template #title>成绩查询</template>
+        </el-menu-item>
+    </router-link>
 </template>
 
 <script setup>
-import {DataBoard, Star} from '@element-plus/icons-vue'
+import {DataBoard, Star, Reading} from '@element-plus/icons-vue'
 
 </script>
 

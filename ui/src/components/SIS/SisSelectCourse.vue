@@ -182,7 +182,12 @@ function getmode(value){
 async function loginxk(){
     await fetch("http://localhost:8877/jwxt/xk/login").then(res=>res.json())
     .then(res=>{
-        console.log(res);
+        if(res.code != 1){
+            ElMessage({
+                message: "进入选课系统失败",
+                type: 'error'
+            })
+        }
     }).catch(err=>{
         console.log(err);
     })

@@ -18,7 +18,8 @@ const routes = [
     component: () => import('../components/SisHome.vue'),
     children:[
       {path: 'qk', component: () => import('../components/SIS/SisSelectCourse.vue')},
-      {path: 'pj', component: () => import('../components/SIS/SisAutoRate.vue')}
+      {path: 'pj', component: () => import('../components/SIS/SisAutoRate.vue')},
+      {path: 'cj', component: () => import('../components/SIS/SisGrade.vue')},
     ]
   },
   {
