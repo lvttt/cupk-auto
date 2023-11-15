@@ -7,8 +7,8 @@ from Response import Success, Error
 def login():
     try:
         # base64 encrypt account and password
-        account = base64.b64encode(app.config["ACCOUNT"].encode('utf-8')).decode('utf-8')
-        password = base64.b64encode(app.config["PASSWORD"].encode('utf-8')).decode('utf-8')
+        account = base64.b64encode(app.config["SIS_ACCOUNT"].encode('utf-8')).decode('utf-8')
+        password = base64.b64encode(app.config["SIS_PASSWORD"].encode('utf-8')).decode('utf-8')
         encoded = account + "%%%" + password
 
         data = {
