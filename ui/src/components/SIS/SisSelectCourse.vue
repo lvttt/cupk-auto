@@ -1,4 +1,8 @@
 <template>
+    <div class="tip">
+            # 建议只使用<em> 本学期计划选课 </em>和<em> 公选课选课 </em><br>
+            # <em>抢课过程中不要切换界面或进行其他操作</em>
+    </div><br>
     <el-upload
     class="upload-demo"
     drag
@@ -24,15 +28,13 @@
       <el-radio-button label="专业内跨年级选课" />
       <el-radio-button label="跨专业选课" />
       <el-radio-button label="公选课选课" />
-    </el-radio-group>
+    </el-radio-group><br>
     <div class="qkdiv">
         <span class="tip"> 失败循环抢课次数 ：</span>
         <el-input-number v-model="qkcount" :min="1" :max="10" />
         <el-button type="primary" class="qkbutton"  @click="startQk">开始抢课</el-button>
     </div>
-    
-    <br>
-        <div class="tip">建议只使用<em> 本学期计划选课 </em>和<em> 公选课选课 </em></div>
+        <br>
   </div><br>
   <el-table ref="tableRef" border :data="courseData" max-height="460px" style="width: 100%">
     <el-table-column align="center" show-overflow-tooltip prop="courseId" label="课程代码" />
@@ -305,8 +307,8 @@ function handleCurrentChange(val){
 </script>
 <style scoped>
 .tip{
-    margin-top: 10px;
-    font-size: small;
+    font-size: 12px;
+    text-align: left;
 }
 .tip em{
     color: red;
@@ -315,8 +317,7 @@ function handleCurrentChange(val){
     justify-content: center;
 }
 .qkdiv{
-    position: absolute;
-    right: 2%;
+    float: right;
 }
 .qkbutton{
     margin-left: 10px;

@@ -34,7 +34,7 @@ def getGradeList():
                 "credit": cols[5].text,
                 "time": cols[6].text,
                 "type": cols[9].text,
-                "status": cols[10].text,
+                "status": cols[13].text,
             })
         result.append({
             'term': '形势与政策',

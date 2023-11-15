@@ -15,12 +15,12 @@
 
 <script setup>
 import { ref } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElLoading } from 'element-plus'
 import { useRouter } from 'vue-router'
+
 
 const value = ref(1)
 const router = useRouter()
-
 
 const options = [{
   "value": 1,
@@ -31,11 +31,17 @@ const options = [{
 }]
 
 function handleClick() {
+  const loading = ElLoading.service({
+    lock: true,
+    text: '登录中...',
+    background: 'rgba(0, 0, 0, 0.7)',
+  })
   if(value.value === 1){
       // 登录教务系统
       fetch("http://localhost:8877/jwxt/login").then(res=>res.json())
       .then(res=>{
           if(res.code === 1){
+            loading.close()
               ElMessage({
                   message: '登录成功',
                   type: 'success'
@@ -48,11 +54,6 @@ function handleClick() {
       .catch(err=>{
         console.log(err)
       })
-      // ElMessage({
-      //     message: '登录成功',
-      //     type: 'success'
-      // })
-      // router.push({path: "/sis/home/qk"})
   }else if(value.value === 2){
       // 登录融合门户
       ElMessage({
@@ -66,5 +67,4 @@ function handleClick() {
 </script>
 
 <style scoped>
-
 </style>

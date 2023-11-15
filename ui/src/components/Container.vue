@@ -14,7 +14,7 @@
                             fit="cover"
                             />
                     </el-col>
-                    <el-col :span="2" :offset="14"><el-button :icon="House" class="logout" @click="logout">退出</el-button></el-col>
+                    <el-col :span="1" :offset="15" class="top"><el-button :icon="House" class="logout" @click="logout">退出</el-button></el-col>
                 </el-row>
             </el-header>
             <el-container>
@@ -86,7 +86,9 @@ defineProps({
 .el-header{
     border-bottom: 1px solid #ebeef5;
 }
-.logout{
-    margin:10% auto;
+.top{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 </style>

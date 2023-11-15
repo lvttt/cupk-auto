@@ -95,6 +95,20 @@ def GetPJList():
     result = AutoRate.getPJList()
     return AutoRate.getRateslist(result)
 
+@jwxt_bp.route('/pj/rate', methods=['POST'])
+def Rate():
+    """
+    评教
+    """
+    from . import AutoRate
+    try:
+        request_data = request.get_json()
+        url = request_data['url']
+        return AutoRate.rate(url)
+    except Exception as e:
+        print(e)
+        return Error(msg="参数错误").toJson()
+
 @jwxt_bp.route('/cj/getlist')
 def GetGradeList():
     """
