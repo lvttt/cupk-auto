@@ -1,5 +1,3 @@
-import base64
-from bs4 import BeautifulSoup as bs4
 from app import app
 from Response import Success, Error
 
@@ -36,4 +34,3 @@ def changePassword(newPassword):
     except Exception as e:
         print("ChangeError: ", e)
         return Error(msg="出错了").toJson()
-

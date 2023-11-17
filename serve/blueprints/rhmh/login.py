@@ -62,7 +62,7 @@ def login(data):
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.188',
         }
         response = session.post(app.config["FP_LOGIN_URL"],
-                                headers = headers, data=data, allow_redirects=True)
+                                headers=headers, data=data, allow_redirects=True)
         error_msg = bs4(response.text, 'lxml').find('td', {'id': 'msg'})
         if error_msg is not None:
             return Error(msg=error_msg.find('span').text).toJson()

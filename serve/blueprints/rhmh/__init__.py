@@ -45,7 +45,8 @@ def changePwd():
     from . import changePassword
     try:
         data = request.get_json()
-        return changePassword.changePassword(data["newPassword"])
+        newPassword = data["newPassword"]
+        return changePassword.changePassword(newPassword)
     except Exception as e:
         print(e)
         return Error(msg="出错了").toJson()
