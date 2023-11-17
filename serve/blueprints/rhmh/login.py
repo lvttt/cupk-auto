@@ -4,6 +4,7 @@ from app import app
 from Response import Success, Error
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_v1_5
+import re
 
 session = app.config["SESSION"]
 
@@ -22,17 +23,23 @@ def getCaptcha():
         data['username'] = account
         data['password'] = encrypt(password)
         data['enableCaptcha'] = 'Y'
-        cookies = {
-            'loginWay': 'username'
-        }
 
         # get captcha
-        response = session.get(app.config["CAPTCHA_URL"], cookies=cookies)
+        response = session.get(app.config["CAPTCHA_URL"])
         data['captcha'] = "data:image/jpg;base64,"+base64.b64encode(response.content).decode('utf-8')
 
         return Success(data=data).toJson()
     except Exception as e:
-        print(e)
+        print("getCaptchaError: ", e)
+        return Error(msg="出错了").toJson()
+
+def changeCaptcha():
+    try:
+        response = session.get(app.config["CAPTCHA_URL"])
+        img_url = "data:image/jpg;base64," + base64.b64encode(response.content).decode('utf-8')
+        return Success(data={"captcha": img_url}).toJson()
+    except Exception as e:
+        print("changeCaptchaError: " ,e)
         return Error(msg="出错了").toJson()
 
 def login(data):
@@ -61,7 +68,7 @@ def login(data):
             return Error(msg=error_msg.find('span').text).toJson()
         return Success().toJson()
     except Exception as e:
-        print(e)
+        print("loginError: ", e)
         return Error(msg="出错了").toJson()
 
 def encrypt(password):
@@ -76,3 +83,14 @@ def encrypt(password):
     # 加密
     cipher_text = base64.b64encode(cipher.encrypt(bytes(password.encode("utf-8"))))
     return cipher_text.decode('utf-8')
+
+def getFPInfo():
+    try:
+        response = session.get("https://portal.cupk.edu.cn/portal/r/cas", allow_redirects=True)
+        soup = bs4(response.text, 'lxml')
+        info = soup.find('script', {'type': 'text/javascript'}).text
+        app.config['FP_SID'] = re.search(r'var sid = "(.*?)";', info).group(1)
+        app.config['FP_CMD'] = re.search(r'var base = \'cmd=(.*?)\'', info).group(1)
+        # print(app.config['FP_SID'], app.config['FP_CMD'])
+    except Exception as e:
+        print("getInfoError " ,e)

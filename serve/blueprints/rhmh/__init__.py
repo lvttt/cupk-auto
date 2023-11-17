@@ -13,6 +13,15 @@ def getCaptcha():
     from . import login
     return login.getCaptcha()
 
+@rhmh_bp.route('/login/changeCaptcha')
+def ChangeCaptcha():
+    """
+    更换验证码
+    """
+    from . import login
+    return login.changeCaptcha()
+
+
 @rhmh_bp.route('/login', methods=['POST'])
 def Login():
     """
@@ -21,7 +30,22 @@ def Login():
     from . import login
     try:
         data = request.get_json()
-        return login.login(data)
+        res = login.login(data)
+        login.getFPInfo()
+        return res
+    except Exception as e:
+        print(e)
+        return Error(msg="出错了").toJson()
+
+@rhmh_bp.route('/changePwd', methods=['POST'])
+def changePwd():
+    """
+    修改密码
+    """
+    from . import changePassword
+    try:
+        data = request.get_json()
+        return changePassword.changePassword(data["newPassword"])
     except Exception as e:
         print(e)
         return Error(msg="出错了").toJson()

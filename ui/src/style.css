@@ -96,3 +96,13 @@ button:focus-visible {
   text-align: center;
   color: #2c3e50;
 }
+
+.tip{
+  margin-top: 10px;
+  font-size: 12px;
+  text-align: left;
+}
+
+.router-link{
+  text-decoration: none;
+}

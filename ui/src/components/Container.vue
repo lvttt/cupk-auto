@@ -3,9 +3,9 @@
         <el-container>
             <el-header>
                 <!-- header -->
-                <el-row>
-                    <el-col :span="8" ><el-image
-                            style="width: 90%; height: 80%"
+                <el-row >
+                    <el-col :span="8" class="top"><el-image
+                            style="width: 90%; height: 80%%"
                             :src="page == '教务系统' ? jwxtLogo : fpLogo"
                             :zoom-rate="1.2"
                             :max-scale="7"
@@ -24,6 +24,7 @@
                         class="el-menu-vertical"
                         :collapse="isCollapse"
                         :default-active="route.path"
+                        :active-text-color="page == '教务系统' ? '#409EFF' : 'rgb(217,71,60)'"
                     >   
                     <br>
                         <el-button plain :icon="Expand" circle @click="changeCollapse" v-if="isCollapse" />
@@ -59,7 +60,7 @@ const router = useRouter()
 const route = useRoute()
 
 function changeCollapse(){
-    isCollapse.value = ! isCollapse.value;
+    isCollapse.value = !isCollapse.value;
 }
 
 function logout(){
@@ -85,10 +86,12 @@ defineProps({
 }
 .el-header{
     border-bottom: 1px solid #ebeef5;
+    height: 75px;
 }
 .top{
     display: flex;
     flex-direction: column;
     justify-content: center;
+    height: 75px;
 }
 </style>

@@ -25,7 +25,4 @@ import {DataBoard, Star, Reading} from '@element-plus/icons-vue'
 </script>
 
 <style scoped>
-.router-link{
-    text-decoration: none;
-}
 </style>
