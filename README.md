@@ -10,3 +10,4 @@
     - 融合门户
         1. 修改密码（√）
 - 目前serve中没有上传config.json和settings.py
+- [v1.0.0](https://github.com/NevFogtMx/cupk-auto/releases "v1.0.0")版本已经发布，可以下载使用
