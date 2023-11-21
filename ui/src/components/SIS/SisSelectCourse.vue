@@ -247,11 +247,13 @@ async function startQk(){
             continue
         }
         let mode = getmode(radio1.value)
-        let courselist = []
-        courseData.value.forEach((v, i, arr)=>{
-            courselist.push(v.courseId + v.classId)
-        })
+        
         for(let j = 0; j < qkcount.value; j++){
+            let courselist = []
+            courseData.value.forEach((v, i, arr)=>{
+                if(v.ready == 0)
+                courselist.push(v.courseId + v.classId)
+            })
             
             ElMessage({
                 message: `第${j+1}次抢课开始`,
